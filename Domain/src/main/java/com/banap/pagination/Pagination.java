@@ -1,7 +1,7 @@
 package com.banap.pagination;
 
 import java.util.List;
-import java.util.function.Function;
+import java.util.function.Function; 
 
 public record Pagination<T>(
         int currentPage,

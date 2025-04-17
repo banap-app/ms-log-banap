@@ -25,7 +25,7 @@ public class LogEntityID extends Identifier {
     }
 
     @Override
-    protected String getValue() {
+    public String getValue() {
         return value;
     }
 

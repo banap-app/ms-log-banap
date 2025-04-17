@@ -56,6 +56,34 @@ public class LogEntity extends AggregateRoot<LogEntityID> {
         return new LogEntity(logId, now, description, titleLog, authorApplication, userId, propertyId,logTypeStatus, logTypeAction);
     }
 
+    public static LogEntity with(LogEntityID logEntityID,
+                                 final String description,
+                                 final String titleLog,
+                                 final String authorApplication,
+                                 final UUID userId,
+                                 final Integer propertyId,
+                                 final Integer logEntityTypeStatusId,
+                                 final Integer logEntityTypeActionId,
+                                 final Instant createdAt
+    ) {
+        final LogEntityTypeStatus logEntityTypeStatus = new LogEntityTypeStatus(logEntityTypeStatusId);
+
+        final LogEntityTypeAction logEntityTypeAction = new LogEntityTypeAction(logEntityTypeActionId);
+
+        return new LogEntity(
+                logEntityID,
+                createdAt,
+                description,
+                titleLog,
+                authorApplication,
+                userId,
+                propertyId,
+                logEntityTypeStatus,
+                logEntityTypeAction
+                );
+    }
+
+
     @Override
     public void validate(ValidationHandler handler) {
         new LogEntityValidator(handler, this).validate();
