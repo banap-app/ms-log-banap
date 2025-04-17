@@ -86,6 +86,8 @@ public class LogEntity extends AggregateRoot<LogEntityID> {
 
     @Override
     public void validate(ValidationHandler handler) {
+        getLogEntityTypeAction().validate(handler);
+        getLogEntityTypeStatus().validate(handler);
         new LogEntityValidator(handler, this).validate();
     }
 

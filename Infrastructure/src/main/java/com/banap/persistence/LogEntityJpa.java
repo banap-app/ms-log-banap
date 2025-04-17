@@ -11,12 +11,14 @@ import jakarta.persistence.Table;
 import java.time.Instant;
 import java.util.UUID;
 
-@Entity
+@Entity(name = "LogEntity")
 @Table(name = "log_entity")
 public class LogEntityJpa {
 
     @Id
-    public UUID id;
+    @Column(name = "id", nullable = false)
+    private String id;
+
 
     @Column(name = "description")
     public String description;
@@ -51,7 +53,7 @@ public class LogEntityJpa {
                          final Integer logEntityTypeStatus,
                          final Integer logEntityTypeAction,
                          final Instant createdAt) {
-        this.id = UUID.fromString(id);
+        this.id = id;
         this.createdAt = createdAt;
         this.titleLog = titleLog;
         this.authorApplication = authorApplication;
@@ -76,10 +78,11 @@ public class LogEntityJpa {
                 logEntity.getCreatedAt()
         );
     }
+    public LogEntityJpa () {}
 
     public LogEntity toDomain() {
         return LogEntity.with(
-                LogEntityID.from(getId().toString()),
+                LogEntityID.from(getId()),
                 getDescription(),
                 getTitleLog(),
                 getAuthorApplication(),
@@ -91,11 +94,11 @@ public class LogEntityJpa {
         );
     }
 
-    public UUID getId() {
+    public String getId() {
         return id;
     }
 
-    public void setId(UUID id) {
+    public void setId(String id) {
         this.id = id;
     }
 

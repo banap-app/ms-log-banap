@@ -2,6 +2,7 @@ package com.banap.log_entity;
 
 import com.banap.exceptions.DomainException;
 import com.banap.validation.Error;
+import com.banap.validation.ValidationHandler;
 
 import java.util.HashMap;
 import java.util.Map;
@@ -12,7 +13,7 @@ public class LogEntityTypeStatus {
     private final static Map<Integer, String> typesLogEntity = new HashMap<>();
 
     private final Integer typeId;
-    private final String typeName;
+    private String typeName;
 
     static {
         typesLogEntity.put(1, "notification");
@@ -21,11 +22,17 @@ public class LogEntityTypeStatus {
     }
 
     public LogEntityTypeStatus(Integer typeId) {
-        if(!typesLogEntity.containsKey(typeId)){
-            throw DomainException.with(new Error("Invalid type Status"));
-        }
+
         this.typeId = typeId;
-        this.typeName = typesLogEntity.get(typeId);
+
+    }
+
+    public void validate(ValidationHandler aHandler) {
+        if(!typesLogEntity.containsKey(this.typeId)){
+            aHandler.append(new Error("Invalid Type Status"));
+        } else {
+            this.typeName = typesLogEntity.get(this.typeId);
+        }
     }
 
     public Integer getTypeId() {

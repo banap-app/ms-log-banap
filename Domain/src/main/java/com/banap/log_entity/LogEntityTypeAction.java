@@ -2,6 +2,7 @@ package com.banap.log_entity;
 
 import com.banap.exceptions.DomainException;
 import com.banap.validation.Error;
+import com.banap.validation.ValidationHandler;
 
 import java.util.HashMap;
 import java.util.Map;
@@ -11,7 +12,7 @@ public class LogEntityTypeAction {
     private final static Map<Integer, String> logEntityTypeAction = new HashMap<>();
 
     private final Integer typeId;
-    private final String typeName;
+    private String typeName;
 
     static {
         logEntityTypeAction.put(10, "createField");
@@ -31,12 +32,15 @@ public class LogEntityTypeAction {
     }
 
     public LogEntityTypeAction(Integer typeId) {
-        if(!logEntityTypeAction.containsKey(typeId)) {
-            throw DomainException.with(new Error("Invalid type Action"));
-        }
-
         this.typeId = typeId;
-        this.typeName = logEntityTypeAction.get(typeId);
+    }
+
+    public void validate(ValidationHandler aHandler) {
+        if(!logEntityTypeAction.containsKey(this.typeId)){
+            aHandler.append(new Error("Invalid Type Action"));
+        } else {
+            this.typeName = logEntityTypeAction.get(this.typeId);
+        }
     }
 
     public Integer getTypeId() {

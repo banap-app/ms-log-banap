@@ -1,8 +1,12 @@
 package com.banap.api.controllers;
 
 
+import com.banap.Result;
+import com.banap.api.swagger.LogEntityControllerApi;
 import com.banap.logentity.create.DefaultLogEntityCreateUseCase;
 import com.banap.logentity.create.LogEntityCommand;
+import com.banap.logentity.create.LogEntityOutput;
+import com.banap.validation.handlers.Notification;
 import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseEntity;
 import org.springframework.web.bind.annotation.PostMapping;
@@ -16,7 +20,7 @@ import java.util.UUID;
 
 @RestController
 @RequestMapping("/api/log")
-public class LogEntityController {
+public class LogEntityController implements LogEntityControllerApi {
 
     private final DefaultLogEntityCreateUseCase logEntityCreateUseCase;
 
@@ -24,24 +28,23 @@ public class LogEntityController {
         this.logEntityCreateUseCase = logEntityCreateUseCase;
     }
 
-
     @PostMapping("/create")
-    public ResponseEntity<?> create(@RequestBody LogEntityApiModel logEntityApiModel) {
-        final var description = logEntityApiModel.description();
-        final var titleLog = logEntityApiModel.titleLog();
-        final var authorApplication = logEntityApiModel.authorApplication();
-        final var userId = logEntityApiModel.userId() == null || logEntityApiModel.userId().isBlank() ? null : UUID.fromString(logEntityApiModel.userId());
-        final var propertyId = logEntityApiModel.propertyId();
-        final var logEntityTypeAction = logEntityApiModel.logEntityTypeAction();
-        final var logEntityTypeStatus = logEntityApiModel.logEntityTypeStatus();
+    @Override
+    public ResponseEntity<?> create(@RequestBody LogEntityApi logEntityApi) {
+        final var description = logEntityApi.description();
+        final var titleLog = logEntityApi.titleLog();
+        final var authorApplication = logEntityApi.authorApplication();
+        final var userId = logEntityApi.userId() == null || logEntityApi.userId().isBlank() ? null : UUID.fromString(logEntityApi.userId());
+        final var propertyId = logEntityApi.propertyId();
+        final var logEntityTypeAction = logEntityApi.logEntityTypeAction();
+        final var logEntityTypeStatus = logEntityApi.logEntityTypeStatus();
 
-        final var logEntityCommand = LogEntityCommand.from(description, titleLog,authorApplication, userId, propertyId, logEntityTypeStatus, logEntityTypeAction);
-
+        final var logEntityCommand = LogEntityCommand.from(description, titleLog, authorApplication, userId, propertyId, logEntityTypeStatus, logEntityTypeAction);
 
         try {
-            final var output = this.logEntityCreateUseCase.execute(logEntityCommand);
+            final Result<LogEntityOutput, Notification> output = this.logEntityCreateUseCase.execute(logEntityCommand);
 
-            if(output.getSecondValue() == null) {
+            if (output.getFirstValue() != null) {
                 return ResponseEntity.ok(output.getFirstValue());
             } else {
                 Map<String, Object> responseBody = new HashMap<>();
@@ -56,4 +59,6 @@ public class LogEntityController {
             return ResponseEntity.badRequest().body("Internal server error");
         }
     }
+
+
 }

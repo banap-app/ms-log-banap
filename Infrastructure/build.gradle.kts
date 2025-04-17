@@ -16,6 +16,7 @@ dependencies {
     implementation("org.springframework.boot:spring-boot-starter-web:3.4.4")
     implementation("org.springframework.boot:spring-boot-starter-data-jpa:3.4.4")
     implementation("org.postgresql:postgresql:42.7.5")
+    implementation ("org.springdoc:springdoc-openapi-starter-webmvc-ui:2.1.0")
     implementation("org.springframework.boot:spring-boot-starter-security:3.4.4")
     implementation(project(":Domain"))
     implementation(project(":Application"))
@@ -24,3 +25,4 @@ dependencies {
 tasks.test {
     useJUnitPlatform()
 }
+

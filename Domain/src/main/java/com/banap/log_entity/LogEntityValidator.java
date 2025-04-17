@@ -34,10 +34,16 @@ public class LogEntityValidator extends Validator {
         checkDescription();
         checkTitleLog();
         checkUUIDUser();
+        checkProperty();
     }
 
     private void checkAuthorApplication() {
-        final var authorApplication = logEntity.getAuthorApplication().trim();
+        final var authorApplication = logEntity.getAuthorApplication();
+
+        if(authorApplication == null) {
+            this.validationHandler().append(new Error("Author Application not be null"));
+            return;
+        }
         if(authorApplication.isEmpty()) {
             this.validationHandler().append(new Error("Author Application not be null"));
             return;
@@ -59,7 +65,12 @@ public class LogEntityValidator extends Validator {
     }
 
     private void checkDescription() {
-        final var description = logEntity.getDescription().trim();
+        final var description = logEntity.getDescription();
+
+        if(description == null) {
+            this.validationHandler().append(new Error("Description not be null"));
+            return;
+        }
 
         if(description.isEmpty()){
             this.validationHandler().append(new Error("Description not be null"));
@@ -69,6 +80,7 @@ public class LogEntityValidator extends Validator {
             this.validationHandler().append(new Error("Description not be null"));
             return;
         }
+
 
         if(description.length() > MAX_DESCRIPTION_LENGTH){
             this.validationHandler().append(new Error("Description not more %".formatted(MAX_DESCRIPTION_LENGTH)));
@@ -83,7 +95,12 @@ public class LogEntityValidator extends Validator {
 
 
     private void checkTitleLog() {
-        final var titleLog = logEntity.getTitleLog().trim();
+        final var titleLog = logEntity.getTitleLog();
+
+        if(titleLog == null){
+            this.validationHandler().append(new Error("Title log not be null"));
+            return;
+        }
 
         if(titleLog.isEmpty()){
             this.validationHandler().append(new Error("Title log not be null"));
@@ -106,7 +123,11 @@ public class LogEntityValidator extends Validator {
     }
 
     private void checkUUIDUser(){
-        final var userId = logEntity.getUserId().toString().trim();
+        final var userId = logEntity.getUserId() != null ? logEntity.getUserId().toString() : null;
+        if(userId == null){
+            this.validationHandler().append(new Error("UserID not be null"));
+            return;
+        }
 
         if(userId.isEmpty()){
             this.validationHandler().append(new Error("UserID not be null"));
@@ -140,4 +161,17 @@ public class LogEntityValidator extends Validator {
         }
 
     }
+
+    private void checkProperty() {
+        final var propertyId = logEntity.getPropertyId() != null ? logEntity.getPropertyId() : null;
+
+        if(propertyId == null) {
+            this.validationHandler().append(new Error("PropertyId not must be null"));
+            return;
+        }
+        if(propertyId == 0) {
+            this.validationHandler().append(new Error("PropertyId not valid"));
+        }
+    }
+
 }

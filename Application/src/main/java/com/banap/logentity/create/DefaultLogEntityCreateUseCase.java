@@ -33,8 +33,9 @@ public class DefaultLogEntityCreateUseCase extends LogEntityUseCase{
             if(notification.hasErrors()) {
                 return new Result<>(null, notification);
             }
-            return new Result<>(LogEntityOutput.from(true, logEntity), null);
-            // return notification.hasErrors() ? Result.error(notification) : create(logEntity, notification);
+
+           //return new Result<>(LogEntityOutput.from(true, logEntity), null);
+            return notification.hasErrors() ? Result.error(notification) : create(logEntity, notification);
         } catch (DomainException ex) {
             notification.append(new Error(ex.getMessage()));
             return new Result<>(null,notification);

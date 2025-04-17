@@ -48,6 +48,6 @@ public class Notification implements ValidationHandler {
 
     @Override
     public List<Error> getErrors() {
-        return List.of();
+        return errors;
     }
 }
