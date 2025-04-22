@@ -41,8 +41,7 @@ public class LogEntityPostgresGateway implements LogEntityGateway {
     }
 
     private LogEntity save(LogEntity logEntity) {
-        System.out.println(logEntity.getId().getValue());
-        System.out.println(LogEntityJpa.from(logEntity).getId());
+
         return this.logEntityRepository.save(LogEntityJpa.from(logEntity)).toDomain();
     }
 
